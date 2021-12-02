@@ -1,14 +1,27 @@
-filename = '2015/2/input.txt'
+route1 = '>'
+route2 = '^>v<'
+route3 = '^v^v^v^v^v'
+
+filename = '2015/3/input.txt'
 with open(filename) as file:
-  lines = file.readlines()
-  presents = [line.strip() for line in lines]
+    route = file.read()
 
-floor = 0
+x = 0
+y = 0
+houses = dict()
+houses[x, y] = True
 
-for i, char in enumerate(y):
-  if char == '(':
-    floor += 1
-  elif char == ')':
-    floor -= 1
+for c in route:
+  if c == '>':
+    x += 1
+  elif c == '<':
+    x -= 1
+  elif c == '^':
+    y += 1
+  elif c == 'v':
+    y -= 1
+    
+  houses[x, y] = True
 
-print(floor)
+
+print(len(houses))
