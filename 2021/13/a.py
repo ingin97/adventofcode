@@ -59,7 +59,7 @@ for dot in dots:
   [x, y] = dot
   paper[y][x] = 1
 
-for fold in folds:
+for fold in folds[:1]:
   [direction, split] = fold
 
   if direction == 'y':
