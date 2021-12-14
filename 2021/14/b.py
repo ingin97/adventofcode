@@ -20,10 +20,10 @@ lines = [
 ]
 
 
-# filename = '2021/14/input.txt'
-# with open(filename) as file:
-#   lines = file.readlines()
-#   lines = [line.strip() for line in lines]
+filename = '2021/14/input.txt'
+with open(filename) as file:
+  lines = file.readlines()
+  lines = [line.strip() for line in lines]
 
 
 template = list(lines[0])
@@ -43,13 +43,10 @@ for current in template:
     pair_counts[last+current] += 1
   last = current
 
-print(pair_counts)
-
-for step in range(1):
+for step in range(40):
   temp = {**pair_counts}
   pair_counts = defaultdict(int)
   for pair, value in temp.items():
-    print(pair_counts)
     if pair in pairs.keys():
       insert = pairs[pair]
       [first, second] = pair
@@ -57,17 +54,15 @@ for step in range(1):
       pair_counts[insert+second] += value
 
 
-print(pair_counts)
-
-
 letter_counts = defaultdict(int)
-for pair, value in pair_counts.items():
+for i, (pair, value) in enumerate(pair_counts.items()):
   [first, second] = pair
 
   letter_counts[first] += value
-  letter_counts[second] += value
 
-print(letter_counts)
-# values = list(counts.values())
-# values.sort()
-# print(values[-1] - values[0])
+letter_counts[template[-1]] += 1
+
+
+values = list(letter_counts.values())
+values.sort()
+print(values[-1] - values[0])
