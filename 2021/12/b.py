@@ -1,23 +1,23 @@
-lines = [
-'fs-end',
-'he-DX',
-'fs-he',
-'start-DX',
-'pj-DX',
-'end-zg',
-'zg-sl',
-'zg-pj',
-'pj-he',
-'RW-he',
-'fs-DX',
-'pj-RW',
-'zg-RW',
-'start-pj',
-'he-WI',
-'zg-he',
-'pj-fs',
-'start-RW',
-]
+# lines = [
+# 'fs-end',
+# 'he-DX',
+# 'fs-he',
+# 'start-DX',
+# 'pj-DX',
+# 'end-zg',
+# 'zg-sl',
+# 'zg-pj',
+# 'pj-he',
+# 'RW-he',
+# 'fs-DX',
+# 'pj-RW',
+# 'zg-RW',
+# 'start-pj',
+# 'he-WI',
+# 'zg-he',
+# 'pj-fs',
+# 'start-RW',
+# ]
 # lines = [
 #   'dc-end',
 #   'HN-start',
@@ -30,15 +30,15 @@ lines = [
 #   'kj-HN',
 #   'kj-dc',
 # ]
-# lines = [
-#   'start-A',
-#   'start-b',
-#   'A-c',
-#   'A-b',
-#   'b-d',
-#   'A-end',
-#   'b-end',
-# ]
+lines = [
+  'start-A',
+  'start-b',
+  'A-c',
+  'A-b',
+  'b-d',
+  'A-end',
+  'b-end',
+]
 
 
 
@@ -59,45 +59,46 @@ for line in lines:
   if _from != 'start':
     adjacent_caves[_to].append(_from)
 
-print(adjacent_caves)
-
 paths = []
-for i in range(200000000):
-  path = []
-  current = 'start'
-  path.append(current)
-  visited = []
+def search(path): 
+  current = path[-1]
 
-  twice = False
-  skip = False
-  while current != 'end':
-    temp = adjacent_caves[current][randint(0, len(adjacent_caves[current])-1)]
-    if temp in visited:
-      # Skip dead ends
-      if twice:
-        all_visited = True
-        for cave in adjacent_caves[current]:
-          if cave not in visited:
-            all_visited = False
-        if all_visited:
-          skip = True
-          break
+  if current == 'end':
+    paths.append(path)
+    return
 
-      if twice:
-        continue
-      else: 
-        twice = True
-    current = temp
-    if current.islower():
-      visited.append(current)
-    path.append(current)
-  if skip:
-    continue
-  paths.append(path)
+  neighbours = adjacent_caves[current]
+
+  for cave in neighbours:
+    if cave.islower() and not isValid(cave, path):
+      # Dead end
+      continue
+    else:
+      search([*path, cave])
+
+from collections import defaultdict
+def isValid(cave, path):
+  if cave not in path:
+    return True
   
+  counts = defaultdict(int)
+  for c in path:
+    if c.islower():
+      counts[c] += 1
+  
+  for count in counts.values():
+    if count >= 2:
+      return False
+
+  return True
+    
+
+search(['start'])
 
 
-paths = [list(x) for x in set(tuple(x) for x in paths)]
-for path in paths:
-  print(path)
 print(len(paths))
+
+# paths = [list(x) for x in set(tuple(x) for x in paths)]
+# for path in paths:
+#   print(path)
+# print(len(paths))
